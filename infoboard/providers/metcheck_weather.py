@@ -10,9 +10,9 @@ import json
 import requests
 
 
-class Forecast(object):  # added object base class for python2 compatibility.
+class MetcheckWeather(object):  # added object base class for python2 compatibility.
     """
-    The Forecast class handles getting, updating,
+    The MetcheckWeather class handles getting, updating,
     itterating and processing forecasts
     """
     __cache_folder = ""
@@ -162,7 +162,7 @@ def main():
     """
     Entry point for testing if the file is run on it's own.
     """
-    weather_forecast = Forecast()
+    weather_forecast = MetcheckWeather()
     print(weather_forecast.current_weather)
     print(weather_forecast.next_hour)
 

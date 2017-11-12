@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 yahoo_news module
 This module processes news rss feed from yahoo.

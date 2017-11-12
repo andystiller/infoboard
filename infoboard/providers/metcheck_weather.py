@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 metcheck_weather module
 This module downloads, caches and processes weather data from metcheck.com.

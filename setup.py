@@ -1,8 +1,6 @@
-"""A setuptools based setup module.
-
-See:
-https://packaging.python.org/en/latest/distributing.html
-https://github.com/pypa/sampleproject
+#!/usr/bin/env python
+"""
+A setuptools based setup module.
 """
 
 # Always prefer setuptools over distutils

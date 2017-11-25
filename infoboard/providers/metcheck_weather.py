@@ -47,6 +47,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         if self._feed_created != None:
             valid_until = self._feed_created + timedelta(hours=12)
             print(self._feed_created)
+            print(self._feed_loaded)
             print(valid_until)
             print(current_time)
             #if current_time < valid_until and self._last_updated < current_time:
@@ -146,6 +147,9 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
     def current_weather(self):
         """ Property to get the current forecast
         """
+        if self._feed_loaded is False:
+            self.update_forecast() # update the forecast to download it if required and load it 
+
         current_time = datetime.now()
         time_to_check = current_time.replace(minute=0, second=0)
         return self._forecast[time_to_check.strftime(self.__TIME_FORMAT)]

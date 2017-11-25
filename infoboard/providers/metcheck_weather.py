@@ -21,13 +21,10 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
     __TIME_FORMAT = '%Y-%m-%dT%H:%M:%S.00'
 
     def __init__(self, lat='51.5', lng='0.1', loc_id='57206'):
-        self._lat = lat
-        self._long = lng
-        self._loc_id = loc_id
+        self._latlong = {'lat': lat, 'lon': lng, 'lid': loc_id}
         self._last_updated = None
-        self._file_loc = self.__cache_folder + 'weather' + self._loc_id + '.json'
+        self._file_loc = self.__cache_folder + 'weather' + loc_id + '.json'
         self._feed_created = None
-        self._feed_location = None
         self._feed_loaded = False
         self._forecast = {}
 
@@ -63,7 +60,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         Function to download the weather data from metcheck.com for the
         specified lattitude and longitude and location ID.
         """
-        url_params = {'lat': self._lat, 'lon': self._long, 'lid': self._loc_id}
+        url_params = self._latlong
         req = requests.get(self.__METCHECK_URL, params=url_params)
         print(req.url)
         status_code = req.status_code
@@ -75,7 +72,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
                 chars_written = json_data.write(req.text)
                 print(chars_written)
 
-                if (chars_written == 0):
+                if chars_written == 0:
                     #if there is nothing written the file save failed
                     status_code = 999
         return status_code
@@ -86,7 +83,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         """
         update_worked = False
 
-        if (self._download_weather_data() == 200):
+        if self._download_weather_data() == 200:
             self._last_updated = datetime.now()
             update_worked = True
 
@@ -122,7 +119,6 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
                 initial_run = weather_data['feedCreation']
                 print(initial_run)
                 self._feed_created = datetime.strptime(initial_run, self.__TIME_FORMAT)
-                self._feed_location = weather_data['metcheckData']['forecastLocation']['location']
                 self._feed_loaded = True
                 self._process_weather_json(forecast_data)
                 load_status = 'Success'
@@ -148,7 +144,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         """ Property to get the current forecast
         """
         if self._feed_loaded is False:
-            self.update_forecast() # update the forecast to download it if required and load it 
+            self.update_forecast() # update the forecast to download it if required and load it.
 
         current_time = datetime.now()
         time_to_check = current_time.replace(minute=0, second=0)
@@ -161,6 +157,24 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         next_hour = datetime.now() + timedelta(hours=1)
         time_to_check = next_hour.replace(minute=0, second=0)
         return self._forecast[time_to_check.strftime(self.__TIME_FORMAT)]
+
+    @property
+    def feed_location(self):
+        """ Property to return the feed location information
+        """
+        feed_location = 'None'
+
+        if self._feed_created != None:
+            try:
+                with open(self._file_loc, 'r') as json_data:
+                    weather_data = json.load(json_data)
+                    feed_location = weather_data['metcheckData']['forecastLocation']['location']
+            except IOError:
+                pass
+            except json.JSONDecodeError:
+                pass
+
+        return feed_location
 
 
 def main():

@@ -102,3 +102,4 @@ ENV/
 
 # Working files
 *.json
+*.DS_Store

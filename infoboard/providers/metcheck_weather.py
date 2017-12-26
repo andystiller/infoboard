@@ -12,7 +12,7 @@ import json
 import requests
 
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 class MetcheckWeather(object):  # added object base class for python2 compatibility.
@@ -162,6 +162,8 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
 
         current_time = datetime.now()
         time_to_check = current_time.replace(minute=0, second=0)
+        logger.debug('Time Format: %s', self.__TIME_FORMAT)
+        logger.debug('Time to fetch: %s', time_to_check.strftime(self.__TIME_FORMAT))
         return self._forecast[time_to_check.strftime(self.__TIME_FORMAT)]
 
     @property

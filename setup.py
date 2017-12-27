@@ -9,10 +9,10 @@ from os import path
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 
-here = path.abspath(path.dirname(__file__))
+HERE = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
 setup(

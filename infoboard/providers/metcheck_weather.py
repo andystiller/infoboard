@@ -49,16 +49,15 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         #if self._last_updated != None and self._feed_created != None:
         if self._feed_created != None:
             valid_until = self._feed_created + timedelta(hours=12)
-            
             logger.debug('Feed created: %s', self._feed_created)
             logger.debug('Feed loaded: %s', self._feed_loaded)
             logger.debug('Feed valid until: %s', valid_until)
-            logger.debug('Current time: %s',current_time)
+            logger.debug('Current time: %s', current_time)
             #if current_time < valid_until and self._last_updated < current_time:
             if current_time < valid_until:
                 #The cache is with 12 hours of current time
                 cache_is_valid = True
-                
+
         logger.info('Cache is valid: %s', cache_is_valid)
         return cache_is_valid
 
@@ -155,10 +154,10 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
     def _process_forecast(self, current_forecast):
         """ Function to remove unwanted items from the forecast
         """
-        display_forecast =  {}
+        display_forecast = {}
         display_forecast['Chance of rain'] = current_forecast['chanceofrain']
         display_forecast['Rain'] = current_forecast['rain']
-        display_forecast['Wind Speed'] =  current_forecast['windspeed']
+        display_forecast['Wind Speed'] = current_forecast['windspeed']
         display_forecast['Wind Direction'] = current_forecast['windletter']
         display_forecast['Description'] = current_forecast['iconName']
         display_forecast['Temperature'] = current_forecast['temperature']
@@ -177,9 +176,8 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         time_to_check = current_time.replace(minute=0, second=0)
         logger.debug('Time Format: %s', self.__TIME_FORMAT)
         logger.debug('Time to fetch: %s', time_to_check.strftime(self.__TIME_FORMAT))
-        display_forecast = self._process_forecast(self._forecast[time_to_check.strftime(self.__TIME_FORMAT)])
-        return display_forecast
-
+        current_forecast = self._forecast[time_to_check.strftime(self.__TIME_FORMAT)]
+        return self._process_forecast(current_forecast)
     @property
     def next_hour(self):
         """ Property to get the forecast for the next hour
@@ -187,8 +185,8 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         logger.info('Get next hour forecast')
         next_hour = datetime.now() + timedelta(hours=1)
         time_to_check = next_hour.replace(minute=0, second=0)
-        display_forecast = self._process_forecast(self._forecast[time_to_check.strftime(self.__TIME_FORMAT)])
-        return display_forecast
+        current_forecast = self._forecast[time_to_check.strftime(self.__TIME_FORMAT)]
+        return self._process_forecast(current_forecast)
 
     @property
     def feed_location(self):

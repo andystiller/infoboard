@@ -152,6 +152,19 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
             self._forecast[forecast_time] = datavalue
             logger.debug('Processing : %s', forecast_time)
 
+    def _process_forecast(self, current_forecast):
+        """ Function to remove unwanted items from the forecast
+        """
+        display_forecast =  {}
+        display_forecast['Chance of rain'] = current_forecast['chanceofrain']
+        display_forecast['Rain'] = current_forecast['rain']
+        display_forecast['Wind Speed'] =  current_forecast['windspeed']
+        display_forecast['Wind Direction'] = current_forecast['windletter']
+        display_forecast['Description'] = current_forecast['iconName']
+        display_forecast['Temperature'] = current_forecast['temperature']
+        display_forecast['Icon'] = current_forecast['icon']
+        return display_forecast
+
     @property
     def current_weather(self):
         """ Property to get the current forecast
@@ -164,7 +177,8 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         time_to_check = current_time.replace(minute=0, second=0)
         logger.debug('Time Format: %s', self.__TIME_FORMAT)
         logger.debug('Time to fetch: %s', time_to_check.strftime(self.__TIME_FORMAT))
-        return self._forecast[time_to_check.strftime(self.__TIME_FORMAT)]
+        display_forecast = self._process_forecast(self._forecast[time_to_check.strftime(self.__TIME_FORMAT)])
+        return display_forecast
 
     @property
     def next_hour(self):
@@ -173,7 +187,8 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         logger.info('Get next hour forecast')
         next_hour = datetime.now() + timedelta(hours=1)
         time_to_check = next_hour.replace(minute=0, second=0)
-        return self._forecast[time_to_check.strftime(self.__TIME_FORMAT)]
+        display_forecast = self._process_forecast(self._forecast[time_to_check.strftime(self.__TIME_FORMAT)])
+        return display_forecast
 
     @property
     def feed_location(self):

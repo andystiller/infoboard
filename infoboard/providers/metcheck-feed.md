@@ -59,8 +59,6 @@
             <br/>
             <br/>
             <br/>
-            <br/>
-            <br/>
             degrees celcius<br/>
             degrees celcius     <br/>
             mm/hr         <br/>
@@ -86,6 +84,9 @@
             <br/>
             <br/>
             <br/>
+            <br/>
+            <br/>   
+            <br />         
             <br/>
             <br/>
             <br/>

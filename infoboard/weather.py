@@ -82,6 +82,24 @@ DRIPICONS = {
     'Wind' : 'wind.svg'
 }
 
+class Weather(object):
+    """
+    The Weather class handles gettin the forecast from a provider, processing and outputting forecasts
+    """
+    __THEME_FOLDER = ""
+
+    def __init__(self, lat='51.5', lng='0.1', loc_id='57206'):
+        self._weather_forecast = MetcheckWeather()
+
+    def _process_forecast(self, forecast):
+        pass
+
+    def current_weather(self):
+        pass
+
+    def next_hour(self):
+        pass
+
 def main():
     """
     Entry point for testing if the file is run on it's own.

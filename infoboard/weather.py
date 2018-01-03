@@ -118,13 +118,13 @@ class Weather(object):
         """
         Function to get and theme the current weather forecast
         """
-        return self._process_forecast(self._weather_forecast.current_weather)
+        return self._process_forecast(self._weather_forecast.current_weather())
 
     def next_hour(self):
         """
         Function to get and theme the weather forecast for the next hour
         """
-        return = self._process_forecast(self._weather_forecast.next_hour)
+        return = self._process_forecast(self._weather_forecast.next_hour())
 
 def main():
     """

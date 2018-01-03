@@ -5,7 +5,7 @@ and displays the conditions for the current hour.
 """
 from providers.metcheck_weather import MetcheckWeather
 
-DRIPICONS_PATH = 'images/dripicons-weather/SVG'
+DRIPICONS_PATH = 'images/dripicons-weather/SVG/'
 DRIPICONS = {
     # Sunny /Clear
     'SU' : 'sun.svg',
@@ -84,21 +84,47 @@ DRIPICONS = {
 
 class Weather(object):
     """
-    The Weather class handles gettin the forecast from a provider, processing and outputting forecasts
+    The Weather class handles gettin the forecast from a provider,
+    processing and outputting forecasts
     """
     __THEME_FOLDER = ""
 
     def __init__(self, lat='51.5', lng='0.1', loc_id='57206'):
-        self._weather_forecast = MetcheckWeather()
+        self._weather_forecast = MetcheckWeather(lat, lng, loc_id)
 
-    def _process_forecast(self, forecast):
-        pass
+    def _theme_icons(self, icon):
+        """
+        Function to get the path to the required icon
+        """
+        return DRIPICONS_PATH + DRIPICONS[icon]
+
+
+    def _process_forecast(self, detailed_forecast):
+        """
+        Function to get only the require information from the forecast
+        """
+        forecast = {}
+        forecast['Summary'] = detailed_forecast['iconName']
+        forecast['Temperature'] = detailed_forecast['temperature'] + 'C'
+        forecast['WindSpeed'] = detailed_forecast['windspeed'] + 'mph'
+        forecast['WindDirection'] = detailed_forecast['windletter']
+        forecast['ChanceOfRain'] = detailed_forecast['chanceofrain'] + '%'
+        forecast['Cloud'] = detailed_forecast['totalcloud'] + '%'
+        icon = self._theme_icons(detailed_forecast['icon'])
+        forecast['Icon'] = icon
+        return forecast
 
     def current_weather(self):
-        pass
+        """
+        Function to get and theme the current weather forecast
+        """
+        return self._process_forecast(self._weather_forecast.current_weather)
 
     def next_hour(self):
-        pass
+        """
+        Function to get and theme the weather forecast for the next hour
+        """
+        return = self._process_forecast(self._weather_forecast.next_hour)
 
 def main():
     """

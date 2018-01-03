@@ -17,4 +17,3 @@ def home():
         title='Home Page',
         weather=''
     )
-

@@ -7,9 +7,9 @@ import logging
 from infoboard.providers.metcheck_weather import MetcheckWeather
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
-DEGREE_SIGN= u'\N{DEGREE SIGN}'
+DEGREE_SIGN = u'\N{DEGREE SIGN}'
 DRIPICONS_PATH = 'images/dripicons-weather/SVG/'
 DRIPICONS_SVG = {
     # Sunny /Clear
@@ -92,40 +92,39 @@ class Weather(object):
     The Weather class handles gettin the forecast from a provider,
     processing and outputting forecasts
     """
-    __THEME_FOLDER = 'static\dripicons-weather'
+    __THEME_FOLDER = 'static/dripicons-weather'
     __THEME_PREFIX = 'diw-'
     __THEME_TEMPERATURE_UNIT = 'diw-degrees-celcius'
 
     def __init__(self, lat='51.5', lng='0.1', loc_id='57206'):
 
-        logger.info('Initialising forecast')
+        LOGGER.info('Initialising forecast')
         self._weather_forecast = MetcheckWeather(lat, lng, loc_id)
 
     def _theme_icons(self, icon):
         """
         Function to get the path to the required icon
         """
-
-        logger.info('Getting icon path')
+        LOGGER.info('Getting icon path')
         return DRIPICONS_PATH + DRIPICONS_SVG[icon] + '.svg'
 
     def _theme_icons_class(self, icon):
         """
         Function to get the path to the required icon
         """
-        logger.info('Getting icon class')
+        LOGGER.info('Getting icon class')
         return self.__THEME_PREFIX + DRIPICONS_SVG[icon]
 
     def _process_forecast(self, detailed_forecast):
         """
         Function to get only the require information from the forecast
         """
-        logger.info('Processing forecast')
+        LOGGER.info('Processing forecast')
         forecast = {}
-        logger.debug('Summary: %s', detailed_forecast)
+        LOGGER.debug('Summary: %s', detailed_forecast)
         forecast['Summary'] = detailed_forecast['Description']
         forecast['Temperature'] = detailed_forecast['Temperature']
-        forecast['TemperatureUnit'] =  DEGREE_SIGN + 'C'
+        forecast['TemperatureUnit'] = DEGREE_SIGN + 'C'
         forecast['TemperatureUnitClass'] = self.__THEME_TEMPERATURE_UNIT
         forecast['WindSpeed'] = detailed_forecast['Wind Speed'] + 'mph'
         forecast['WindDirection'] = detailed_forecast['Wind Direction']
@@ -142,32 +141,34 @@ class Weather(object):
         """
         Property to get the theme css URL
         """
-        return self.__THEME_FOLDER + '\webfont\style.css'
+        return self.__THEME_FOLDER + '/webfont/style.css'
 
     @property
     def font_css(self):
         """
         Property to get the font css URL
         """
-        return self.__THEME_FOLDER + '\webfont\webfont.css'
+        return self.__THEME_FOLDER + '/webfont/webfont.css'
 
     @property
     def current_weather(self):
         """
         Property to get and theme the current weather forecast
         """
-        logger.info('Getting current forecast')
+        LOGGER.info('Getting current forecast')
         _current_weather = self._weather_forecast.current_weather
-        logger.debug('Summary: %s', _current_weather)
+        LOGGER.debug('Summary: %s', _current_weather)
         return self._process_forecast(_current_weather)
 
-    #@property
-    #def next_hour(self):
-    #    """
-    #    Property to get and theme the weather forecast for the next hour
-    #    """
-    #    _nexthour = self._weather_forecast.next_hour
-    #    return = self._process_forecast(_nexthour)
+    @property
+    def next_hour(self):
+        """
+        Property to get and theme the weather forecast for the next hour
+        """
+        LOGGER.info('Getting next hour forecast')
+        _next_weather = self._weather_forecast.next_hour
+        LOGGER.debug('Summary: %s', _next_weather)
+        return self._process_forecast(_next_weather)
 
 def main():
     """

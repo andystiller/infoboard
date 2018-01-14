@@ -1,3 +1,11 @@
-#weather-icon {
-    font-size: 5em;
+#weather-icon, #weather-temperature {
+    font-size: 8rem;
+}
+
+#weather-units {
+    font-size: 3.6rem;
+}
+
+#weather-details p {
+    margin: 0.1em auto;
 }

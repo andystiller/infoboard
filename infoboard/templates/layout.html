@@ -6,7 +6,6 @@
     <title>{{ title }}</title>
     <link rel="stylesheet" type="text/css" href="/static/milligram.css" />
     <link rel="stylesheet" type="text/css" href="/static/infoboard.css" />
-    <link rel="stylesheet" type="text/css" href="{{ weathercss }}" />
     <link rel="stylesheet" type="text/css" href="{{ weatherfont }}" />
 </head>
 
@@ -31,7 +30,11 @@
 
     <div class="container body-content">
         {% block content %}{% endblock %}
-        {% block weather %}{% endblock %}
+        <div class="row">
+            <div class="column">{% block weather %}{% endblock %}</div>
+            <div class="column">{% block news %}{% endblock %}</div>
+        </div>
+
         <hr />
         <footer>
             <p>&copy; </p>

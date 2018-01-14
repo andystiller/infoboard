@@ -94,6 +94,7 @@ class Weather(object):
     """
     __THEME_FOLDER = 'static\dripicons-weather'
     __THEME_PREFIX = 'diw-'
+    __THEME_TEMPERATURE_UNIT = 'diw-degrees-celcius'
 
     def __init__(self, lat='51.5', lng='0.1', loc_id='57206'):
 
@@ -115,7 +116,6 @@ class Weather(object):
         logger.info('Getting icon class')
         return self.__THEME_PREFIX + DRIPICONS_SVG[icon]
 
-
     def _process_forecast(self, detailed_forecast):
         """
         Function to get only the require information from the forecast
@@ -124,7 +124,9 @@ class Weather(object):
         forecast = {}
         logger.debug('Summary: %s', detailed_forecast)
         forecast['Summary'] = detailed_forecast['Description']
-        forecast['Temperature'] = detailed_forecast['Temperature'] + DEGREE_SIGN + 'C'
+        forecast['Temperature'] = detailed_forecast['Temperature']
+        forecast['TemperatureUnit'] =  DEGREE_SIGN + 'C'
+        forecast['TemperatureUnitClass'] = self.__THEME_TEMPERATURE_UNIT
         forecast['WindSpeed'] = detailed_forecast['Wind Speed'] + 'mph'
         forecast['WindDirection'] = detailed_forecast['Wind Direction']
         forecast['ChanceOfRain'] = detailed_forecast['Chance of rain'] + '%'

@@ -161,6 +161,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         display_forecast['Wind Direction'] = current_forecast['windletter']
         display_forecast['Description'] = current_forecast['iconName']
         display_forecast['Temperature'] = current_forecast['temperature']
+        display_forecast['Cloud'] = current_forecast['totalcloud']
         display_forecast['Icon'] = current_forecast['icon']
         return display_forecast
 
@@ -177,7 +178,9 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         logger.debug('Time Format: %s', self.__TIME_FORMAT)
         logger.debug('Time to fetch: %s', time_to_check.strftime(self.__TIME_FORMAT))
         current_forecast = self._forecast[time_to_check.strftime(self.__TIME_FORMAT)]
+        logger.debug('Forecast: %s', current_forecast)
         return self._process_forecast(current_forecast)
+
     @property
     def next_hour(self):
         """ Property to get the forecast for the next hour

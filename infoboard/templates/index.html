@@ -10,7 +10,7 @@
 
 {% block weather %}
 
-<div id="weather" class="container">
+<div id="weather" class="container block">
     <h2>Weather from Metcheck</h2>
     <div  id="weather-details" class="row">
         <div class="container column column-50">
@@ -29,13 +29,16 @@
     </div>
     <div class="row">
         <div id="weather-wind" class="column">
-            <h3>Wind</h3>
-            <p>Speed {{ weather.WindSpeed}}</p>
-            <p>Direction {{ weather.WindDirection}}</p>
+            <p>
+                Wind Speed {{ weather.WindSpeed}}<br/>
+                Wind Direction {{ weather.WindDirection}}
+            </p>
         </div>
         <div id="weather-cloud" class="column">
-            <span>Chance of rain {{ weather.ChanceOfRain}}</span>
-            <span>Cloud cover {{ weather.Cloud}}</span>
+            <p>
+                Chance of rain {{ weather.ChanceOfRain}}<br/>
+                Cloud cover {{ weather.Cloud}}
+            </p>
         </div>
     </div>
 </div>
@@ -44,7 +47,7 @@
 
 {% block news %}
 
-<div id="news" class="container">
+<div id="news" class="container block">
     <h2>News from Yahoo</h2>
 </div>
 

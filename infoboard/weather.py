@@ -3,92 +3,181 @@
 Weather module takes the weather information in a weather provider
 and displays the conditions for the current hour.
 """
-from providers.metcheck_weather import MetcheckWeather
+import logging
+from infoboard.providers.metcheck_weather import MetcheckWeather
 
-DRIPICONS_PATH = 'images/dripicons-weather/SVG'
-DRIPICONS = {
+logging.basicConfig(level=logging.INFO)
+LOGGER = logging.getLogger(__name__)
+
+DEGREE_SIGN = u'\N{DEGREE SIGN}'
+DRIPICONS_PATH = 'images/dripicons-weather/SVG/'
+DRIPICONS_SVG = {
     # Sunny /Clear
-    'SU' : 'sun.svg',
-    'NSU' : 'moon-25.svg',
+    'SU' : 'sun',
+    'NSU' : 'moon-25',
     # Fair
-    'FA' : 'sun.svg',
-    'NFA' : 'moon-25.svg',
+    'FA' : 'sun',
+    'NFA' : 'moon-25',
     # Mostly Cloudy / Partly Cloudy
-    'PC' : 'cloud-sun.svg',
-    'NPC' : 'cloud-moon.svg',
+    'PC' : 'cloud-sun',
+    'NPC' : 'cloud-moon',
     # Cloudy
-    'CL' : 'clouds-sun.svg',
-    'NCL' : 'clouds-moon.svg',
+    'CL' : 'clouds-sun',
+    'NCL' : 'clouds-moon',
     # Mist/Fog
-    'FG' : 'fog.svg',
-    'NFG' : 'fog.svg',
+    'FG' : 'fog',
+    'NFG' : 'fog',
     # Light Rain
-    'LR' : 'cloud-rain-2-sun.svg',
-    'NLR' : 'cloud-rain-2-moon.svg',
+    'LR' : 'cloud-rain-2-sun',
+    'NLR' : 'cloud-rain-2-moon',
     # Sleet Showers
-    'SL' : 'cloud-snow-sun.svg',
-    'NSL' : 'cloud-snow-moon.svg',
+    'SL' : 'cloud-snow-sun',
+    'NSL' : 'cloud-snow-moon',
     # Hazy/High Cloud
-    'HZ' : 'cloud-fog-sun.svg',
-    'NHZ' : 'cloud-fog-moon.svg',
+    'HZ' : 'cloud-fog-sun',
+    'NHZ' : 'cloud-fog-moon',
     # ThunderSnow
-    'TS' : 'cloud-rain-lightning-sun.svg',
-    'NTS' : 'cloud-rain-lightning-moon.svg',
+    'TS' : 'cloud-rain-lightning-sun',
+    'NTS' : 'cloud-rain-lightning-moon',
     # ThunderSleet
-    'TL' : 'cloud-rain-lightning-moon.svg',
-    'NTL' : 'cloud-rain-lightning-sun.svg',
+    'TL' : 'cloud-rain-lightning-moon',
+    'NTL' : 'cloud-rain-lightning-sun',
     # Heavy Rain
-    'HR' : 'cloud-rain-sun.svg',
-    'NHR' : 'cloud-rain-moon.svg',
+    'HR' : 'cloud-rain-sun',
+    'NHR' : 'cloud-rain-moon',
     # Intermittent Rain
-    'RO' : 'cloud-rain-2-sun.svg',
-    'NRO' : 'cloud-rain-2-sun.svg',
+    'RO' : 'cloud-rain-2-sun',
+    'NRO' : 'cloud-rain-2-sun',
     # Drizzle
-    'DZ' : 'cloud-drizzle-sun.svg',
-    'NDZ' : 'cloud-drizzle-moon.svg',
+    'DZ' : 'cloud-drizzle-sun',
+    'NDZ' : 'cloud-drizzle-moon',
     # Rain Showers
-    'SH' : 'cloud-rain-2-sun.svg',
-    'NSH' : 'cloud-rain-2-sun.svg',
+    'SH' : 'cloud-rain-2-sun',
+    'NSH' : 'cloud-rain-2-sun',
     # Light Snow
-    'LS' : 'cloud-snow-sun.svg',
-    'NLS' : 'cloud-snow-moon.svg',
+    'LS' : 'cloud-snow-sun',
+    'NLS' : 'cloud-snow-moon',
     # Light Sleet
-    'LL' : 'cloud-snow-sun.svg',
-    'NLL' : 'cloud-snow-moon.svg',
+    'LL' : 'cloud-snow-sun',
+    'NLL' : 'cloud-snow-moon',
     # Heavy Snow
-    'HS' : 'cloud-snow.svg',
-    'NHS' : 'cloud-snow.svg',
+    'HS' : 'cloud-snow',
+    'NHS' : 'cloud-snow',
     # Heavy Sleet
-    'HL' : 'cloud-snow.svg',
-    'NHL' : 'cloud-snow.svg',
+    'HL' : 'cloud-snow',
+    'NHL' : 'cloud-snow',
     # Thunderstorms
-    'TH' : 'cloud-rain-lightning-sun.sv',
-    'NTH' : 'cloud-rain-lightning-moon.sv',
+    'TH' : 'cloud-rain-lightning-sun',
+    'NTH' : 'cloud-rain-lightning-moon',
     # Wet & Windy
-    'WW' : 'cloud-wind.svg',
-    'NWW' : 'cloud-wind.svg',
+    'WW' : 'cloud-wind',
+    'NWW' : 'cloud-wind',
     # Hail
-    'HI' : 'cloud-hail-sun.svg',
-    'NHI' : 'cloud-hail-moon.svg',
+    'HI' : 'cloud-hail-sun',
+    'NHI' : 'cloud-hail-moon',
     # Snow Showers
-    'SS' : 'cloud-snow-sun.svg',
-    'NSS' : 'cloud-snow-moon.svg',
+    'SS' : 'cloud-snow-sun',
+    'NSS' : 'cloud-snow-moon',
     # Dry & Windy
-    'WI' : 'wind.svg',
-    'NWI' : 'wind.svg',
+    'WI' : 'wind',
+    'NWI' : 'wind',
     # Other icons
-    'Precip' : 'umbrella.svg',
-    'Temp' : 'thermometer-50.svg',
-    'Wind' : 'wind.svg'
+    'Precip' : 'umbrella',
+    'Temp' : 'thermometer-50',
+    'Wind' : 'wind'
 }
+
+class Weather(object):
+    """
+    The Weather class handles getting the forecast from a provider,
+    processing and outputting forecasts
+    """
+    __THEME_FOLDER = 'static/dripicons-weather'
+    __THEME_PREFIX = 'diw-'
+    __THEME_TEMPERATURE_UNIT = 'diw-degrees-celcius'
+
+    def __init__(self, lat='51.5', lng='0.1', loc_id='57206'):
+
+        LOGGER.info('Initialising forecast')
+        self._weather_forecast = MetcheckWeather(lat, lng, loc_id)
+
+    def _theme_icons(self, icon):
+        """
+        Function to get the path to the required icon
+        """
+        LOGGER.info('Getting icon path')
+        return DRIPICONS_PATH + DRIPICONS_SVG[icon] + '.svg'
+
+    def _theme_icons_class(self, icon):
+        """
+        Function to get the path to the required icon
+        """
+        LOGGER.info('Getting icon class')
+        return self.__THEME_PREFIX + DRIPICONS_SVG[icon]
+
+    def _process_forecast(self, detailed_forecast):
+        """
+        Function to get only the require information from the forecast
+        """
+        LOGGER.info('Processing forecast')
+        forecast = {}
+        LOGGER.debug('Summary: %s', detailed_forecast)
+        forecast['Summary'] = detailed_forecast['Description']
+        forecast['Temperature'] = detailed_forecast['Temperature']
+        forecast['TemperatureUnit'] = DEGREE_SIGN + 'C'
+        forecast['TemperatureUnitClass'] = self.__THEME_TEMPERATURE_UNIT
+        forecast['WindSpeed'] = detailed_forecast['Wind Speed'] + 'mph'
+        forecast['WindDirection'] = detailed_forecast['Wind Direction']
+        forecast['ChanceOfRain'] = detailed_forecast['Chance of rain'] + '%'
+        forecast['Cloud'] = detailed_forecast['Cloud'] + '%'
+
+        icon = self._theme_icons(detailed_forecast['Icon'])
+        forecast['Icon'] = icon
+        forecast['IconClass'] = self._theme_icons_class(detailed_forecast['Icon'])
+        forecast['Credits'] = self._weather_forecast.credits
+        return forecast
+
+    @property
+    def theme_css(self):
+        """
+        Property to get the theme css URL
+        """
+        return self.__THEME_FOLDER + '/webfont/style.css'
+
+    @property
+    def font_css(self):
+        """
+        Property to get the font css URL
+        """
+        return self.__THEME_FOLDER + '/webfont/webfont.css'
+
+    @property
+    def current_weather(self):
+        """
+        Property to get and theme the current weather forecast
+        """
+        LOGGER.info('Getting current forecast')
+        _current_weather = self._weather_forecast.current_weather
+        LOGGER.debug('Summary: %s', _current_weather)
+        return self._process_forecast(_current_weather)
+
+    @property
+    def next_hour(self):
+        """
+        Property to get and theme the weather forecast for the next hour
+        """
+        LOGGER.info('Getting next hour forecast')
+        _next_weather = self._weather_forecast.next_hour
+        LOGGER.debug('Summary: %s', _next_weather)
+        return self._process_forecast(_next_weather)
 
 def main():
     """
     Entry point for testing if the file is run on it's own.
     """
-    weather_forecast = MetcheckWeather()
+
+    weather_forecast = Weather()
     print(weather_forecast.current_weather)
-    print(weather_forecast.next_hour)
 
 if __name__ == "__main__":
     main()

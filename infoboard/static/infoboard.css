@@ -1,0 +1,25 @@
+#weather-icon, #weather-temperature {
+    font-size: 8rem;
+}
+
+#weather-units {
+    font-size: 3.6rem;
+}
+
+#weather-details p {
+    margin: 0 auto;
+}
+
+#weather-details {
+    margin-bottom: 1em;
+}
+
+.block {
+    border: 2px solid #606c76;
+    padding: 10px;
+    border-radius: 25px;
+}
+
+.block h2 {
+    text-align: center;
+}

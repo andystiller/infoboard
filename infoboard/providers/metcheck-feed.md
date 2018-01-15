@@ -1,6 +1,5 @@
 # JSON file structure
 
-
 <table>
     <tr>
         <td><i>
@@ -25,8 +24,8 @@
                 "winddirection": "89",       <br/>
                 "windletter": "E",        <br/>
                 "icon": "FA",             <br/>
-                "iconName": "Fair",        <br/>    
-                "chanceofrain": "85",        <br/> 
+                "iconName": "Fair",        <br/>
+                "chanceofrain": "85",        <br/>
                 "chanceofsnow": "10",        <br/>
                 "dayOfWeek": "5",          <br/>
                 "weekday": "Thursday",      <br/>
@@ -52,7 +51,7 @@
         "feedModelRun": "00Z",        <br/>
         "feedModelRunInitialTime": "2016-10-13T00:00:00.00",<br/>
         "feedResolution": "0.01"     <br/>
-}                                 <br/>                    
+}                                 <br/>
         </i>
         </td>
         <td>
@@ -85,8 +84,8 @@
             <br/>
             <br/>
             <br/>
-            <br/>   
-            <br />         
+            <br/>
+            <br />
             <br/>
             <br/>
             <br/>
@@ -103,18 +102,19 @@
             Model Run Used     <br/>
             <br/>
             <br/>
-            <br/>                  
+            <br/>
         </td>
     </tr>
 </table>
 
 ## Update Times
+
 The GHX model is updated at around 08:40Z, 20:40Z
 
 ## TimeSteps
-6-120 hours : 1 Hour Intervals
-123-240 hours : 3 Hour Intervals 
 
+6-120 hours : 1 Hour Intervals
+123-240 hours : 3 Hour Intervals
 
 ## Possible Weather Variables
 
@@ -130,7 +130,7 @@ The GHX model is updated at around 08:40Z, 20:40Z
     <tr>
         <td>Fair</td>
         <td>FA / NFA</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Mostly Cloudy</td>
         <td>PC / NPC</td>
@@ -140,7 +140,7 @@ The GHX model is updated at around 08:40Z, 20:40Z
     </tr>  <tr>
         <td>Mist/Fog</td>
         <td>FG / NFG</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Light Rain</td>
         <td>LR / NLR</td>
@@ -148,11 +148,11 @@ The GHX model is updated at around 08:40Z, 20:40Z
     <tr>
         <td>Sleet Showers <font color="red">NEW</font></td>
         <td>SL / NSL</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Hazy/High Cloud <font color="red">NEW</font></td>
         <td>HZ / NHZ</td>
-    </tr>  
+    </tr>
     <tr>
         <td>ThunderSnow <font color="red">NEW</font></td>
         <td>TS / NTS</td>
@@ -160,59 +160,59 @@ The GHX model is updated at around 08:40Z, 20:40Z
     <tr>
         <td>ThunderSleet <font color="red">NEW</font></td>
         <td>TL / NTL</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Heavy Rain</td>
         <td>HR / NHR</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Intermittent Rain</td>
         <td>RO / NRO</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Drizzle</td>
         <td>DZ / NDZ</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Rain Showers</td>
         <td>SH / NSH</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Light Snow</td>
         <td>LS / NLS</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Light Sleet</td>
         <td>LL / NLL</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Heavy Snow</td>
         <td>HS / NHS</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Heavy Sleet</td>
         <td>HL / NHL</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Thunderstorms</td>
         <td>TH / NTH</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Wet &amp; Windy</td>
         <td>WW / NWW</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Partly Cloudy</td>
         <td>PC / NPC</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Hail</td>
         <td>HI / NHI</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Snow Showers</td>
         <td>SS / NSS</td>
-    </tr>  
+    </tr>
     <tr>
         <td>Dry &amp; Windy</td>
         <td>WI / NWI</td>

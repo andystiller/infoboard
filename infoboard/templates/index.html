@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div id="summary">
+   Infobaord Dummy content
+</div>
+
+{% endblock %}
+
+{% block weather %}
+
+<div id="weather" class="container block">
+    <h2>Weather from Metcheck</h2>
+    <div  id="weather-details" class="row">
+        <div class="container column column-50">
+            <div id="weather-icon" class="row">
+                <p class="{{ weather.IconClass }}"></p>
+            </div>
+            <div id="weather-summary" class="row">
+                <p>{{ weather.Summary }}</p>
+            </div>
+        </div>
+        <div class="container column column-50">
+            <p id="weather-temperature" >{{ weather.Temperature }}<span id="weather-units" class="{{ weather.TemperatureUnitClass }}"></span></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="weather-wind" class="column">
+            <p>
+                Wind Speed {{ weather.WindSpeed}}<br/>
+                Wind Direction {{ weather.WindDirection}}
+            </p>
+        </div>
+        <div id="weather-cloud" class="column">
+            <p>
+                Chance of rain {{ weather.ChanceOfRain}}<br/>
+                Cloud cover {{ weather.Cloud}}
+            </p>
+        </div>
+    </div>
+    <div id="weather-credits" class="row">{{ weather.Credits|safe }}</div>
+</div>
+
+{% endblock %}
+
+{% block news %}
+
+<div id="news" class="container block">
+    <h2>News from Yahoo</h2>
+    <ul class="container">
+        {% for story in news %}
+            <li class="row">
+                <div class="column column-33">
+                    <img src="{{ story.Image.url }}" width="{{ story.Image.width }}" height="{{ story.Image.height }}" />
+                </div>
+                <div class="column column-66">
+                    <a href="{{ story.Link }}">{{story.Title|safe }}</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+{% endblock %}

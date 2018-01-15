@@ -1,0 +1,18 @@
+{
+  "DEFAULT": {
+    "WEB_TITLE": "Infoboard"
+  },
+  "WEATHER": {
+    "LAT":"51.5", 
+    "LNG":"0.1", 
+    "LOC_ID":"57206"
+  },
+  "NEWS": {
+  },
+  "TRAVEL": {
+      "SEARCH_TERMS": ""
+  },
+  "CALENDAR": {
+      "SECRET_URL": ""
+  }
+}

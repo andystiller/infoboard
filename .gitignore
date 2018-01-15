@@ -103,3 +103,6 @@ ENV/
 # Working files
 *.json
 *.DS_Store
+
+# Whitelist some files
+!default-settings.json

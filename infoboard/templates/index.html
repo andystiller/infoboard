@@ -24,9 +24,8 @@
         <div class="container column column-50">
             <p id="weather-temperature" >{{ weather.Temperature }}<span id="weather-units" class="{{ weather.TemperatureUnitClass }}"></span></p>
         </div>
-
-
     </div>
+
     <div class="row">
         <div id="weather-wind" class="column">
             <p>
@@ -41,6 +40,7 @@
             </p>
         </div>
     </div>
+    <div id="weather-credits" class="row">{{ weather.Credits|safe }}</div>
 </div>
 
 {% endblock %}
@@ -49,6 +49,19 @@
 
 <div id="news" class="container block">
     <h2>News from Yahoo</h2>
+    <ul class="container">
+        {% for story in news %}
+            <li class="row">
+                <div class="column column-33">
+                    <img src="{{ story.Image.url }}" width="{{ story.Image.width }}" height="{{ story.Image.height }}" />
+                </div>
+                <div class="column column-66">
+                    <a href="{{ story.Link }}">{{story.Title|safe }}</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
 </div>
 
 {% endblock %}

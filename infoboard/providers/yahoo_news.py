@@ -17,12 +17,13 @@ class YahooNews(object):  # added object base class for python2 compatibility.
     def __init__(self, limit = None):
         self._feed = None
         self._iterator = None
-        self._index = 1
+        self._index = 0
         self.update()
-        if limit:
-            self._limit = limit
-        else:
+
+        if limit is None:
             self._limit = max(self._feed)
+        else:
+            self._limit = limit
 
     def update(self):
         self._feed = feedparser.parse(self.__YAHOO_NEWS_URL)
@@ -37,11 +38,12 @@ class YahooNews(object):  # added object base class for python2 compatibility.
     def __next__(self):
         story = None
 
-        if self._index <= self._limit:
+        if self._index < self._limit:
             story = self._iterator.__next__()
             self._index += 1
         else:
             raise StopIteration
+
         return story
 
 def main():
@@ -49,12 +51,12 @@ def main():
     Entry point for testing if the file is run on it's own.
     """
     news_feed = YahooNews(3)
-    feed = news_feed.news()
+    # feed = news_feed.news()
     # for key in feed["entries"]:
     #         print(unidecode(key["title"]))
 
     for news_item in news_feed:
-        print(news_item['title'])
+        print(news_item)
 
 if __name__ == "__main__":
     main()

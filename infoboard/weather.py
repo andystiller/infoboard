@@ -89,7 +89,7 @@ DRIPICONS_SVG = {
 
 class Weather(object):
     """
-    The Weather class handles gettin the forecast from a provider,
+    The Weather class handles getting the forecast from a provider,
     processing and outputting forecasts
     """
     __THEME_FOLDER = 'static/dripicons-weather'
@@ -134,6 +134,7 @@ class Weather(object):
         icon = self._theme_icons(detailed_forecast['Icon'])
         forecast['Icon'] = icon
         forecast['IconClass'] = self._theme_icons_class(detailed_forecast['Icon'])
+        forecast['Credits'] = self._weather_forecast.credits
         return forecast
 
     @property

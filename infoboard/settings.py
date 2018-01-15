@@ -10,18 +10,21 @@ SETTINGS_FILE ="settings.json"
 DEFAULT_SETTINGS ="default-settings.json"
 
 def get_settings(section, key):
+    """
+    Function to get the required setting it tries to return
+    the custom settings and if that fails it tries the 
+    default settings if all fails it returns "". 
+    """
     setting = ""
 
     if os.path.isfile(SETTINGS_FILE):
-        with open(SETTINGS_FILE, 'r') as f:
-            config = json.load(f)
-        
+        with open(SETTINGS_FILE, 'r') as configfile:
+            config = json.load(configfile)
         setting = config[section][key]
 
     elif os.path.isfile(DEFAULT_SETTINGS):
-        with open(DEFAULT_SETTINGS, 'r') as f:
-            config = json.load(f)
-        
+        with open(DEFAULT_SETTINGS, 'r') as configfile:
+            config = json.load(configfile)
         setting = config[section][key]
 
     return setting

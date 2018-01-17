@@ -8,6 +8,7 @@ It uses their ical feed (either public or private).
 from datetime import datetime
 from datetime import timedelta
 import logging
+from icalendar import Calendar
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -25,17 +26,33 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         self._last_updated = None
         self._calendar_path = calendar_path
         self._file_loc = self.__cache_folder + 'calendar'  + '.ics'
+        self._ics_created = None
+        self._ics_loaded = False
+        self._calendar = {}
         self.update_calendar()
 
     def _cache_valid(self):
         """
-        Private function to check that the calendar is within 12 hours of the
+        Private function to check that the calendar is within 6 hours of the
         current date and time.
         Returns true is the cache is valid otherwise returns false.
         """
         LOGGER.info('Checking cache is valid')
         current_time = datetime.now()
         cache_is_valid = False
+
+        LOGGER.debug('Last updated: %s', self._last_updated)
+
+        if self._feed_created != None:
+            valid_until = self._feed_created + timedelta(hours=6)
+            LOGGER.debug('Calendar created: %s', self._ics_created)
+            LOGGER.debug('Calendar loaded: %s', self._ics_loaded)
+            LOGGER.debug('Calendar valid until: %s', valid_until)
+            LOGGER.debug('Current time: %s', current_time)
+            #if current_time < valid_until and self._last_updated < current_time:
+            if current_time < valid_until:
+                #The cache is with 12 hours of current time
+                cache_is_valid = True
 
         LOGGER.info('Cache is valid: %s', cache_is_valid)
         return cache_is_valid
@@ -44,19 +61,54 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         """
         Function to download the calendar from Google using the specifeid link.
         """
-        pass
+        LOGGER.info('Downloading calendar')
+        req = requests.get(self._calendar_path)
+        status_code = req.status_code
+        LOGGER.debug('HTML status code: %d', status_code)
+
+        # If we have recieved the forecast save it for later
+        if status_code == 200:
+            with open(self._file_loc, 'w') as ics_data:
+                chars_written = ics.write(req.text)
+                LOGGER.debug('Number of characters written: %d', chars_written)
+
+                if chars_written == 0:
+                    #if there is nothing written the file save failed
+                    status_code = 999
+
+        return status_code
+
 
     def force_update(self):
         """
         Method to force an update fo the cached data and calendar
         """
-        pass
+        LOGGER.info('Forcing Update')
+        update_worked = False
+
+        if self._download_ical() == 200:
+            self._last_updated = datetime.now()
+            update_worked = True
+
+        LOGGER.debug('Updating worked: %s', update_worked)
+        return update_worked
 
     def update_calendar(self):
         """
         Method to get an updated calendar if available
         """
-        pass
+        pasLOGGER.info('Updating calendar')
+        #if the calendar isn't loaded try to load the cached version
+        if self._ics_loaded is False:
+            LOGGER.info('update_calendar: Calendar loading')
+            self._load_calendar()
+            LOGGER.debug('Feed loaded : %s', self._ics_loaded)
+
+        if self._cache_valid():
+            #Check that the cached version is valid
+            LOGGER.info('update_forecast Cache is valid.')
+        else:
+            self.force_update()s
 
     def _load_calendar(self):
         """

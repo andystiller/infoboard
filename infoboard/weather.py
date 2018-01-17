@@ -171,6 +171,16 @@ class Weather(object):
         LOGGER.debug('Summary: %s', _next_weather)
         return self._process_forecast(_next_weather)
 
+    @property
+    def feed_location(self):
+        """
+        Property to get and theme the weather forecast for the next hour
+        """
+        LOGGER.info('Getting next hour forecast')
+        _location = self._weather_forecast.feed_location
+        LOGGER.debug('Location: %s', _location)
+        return _location
+
 def main():
     """
     Entry point for testing if the file is run on it's own.

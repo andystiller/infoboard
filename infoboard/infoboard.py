@@ -30,5 +30,6 @@ def home():
         weathercss=LOCAL_WEATHER.theme_css,
         weatherfont=LOCAL_WEATHER.font_css,
         weather=LOCAL_WEATHER.current_weather,
+        weather_location=LOCAL_WEATHER.feed_location,
         news=News(3)
     )

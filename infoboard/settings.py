@@ -17,14 +17,16 @@ def get_settings(section, key):
     """
     setting = ""
     
-    print(DEFAULT_SETTINGS)
-    with open(DEFAULT_SETTINGS, 'r') as configfile:
-        config = json.load(configfile)
-        setting = config[section][key]
+    if os.path.isfile(SETTINGS_FILE):
+        print(SETTINGS_FILE)
+        with open(SETTINGS_FILE, 'r') as configfile:
+            config = json.load(configfile)
+            setting = config[section][key]
 
-    print(SETTINGS_FILE)
-    with open(SETTINGS_FILE, 'r') as configfile:
-        config = json.load(configfile)
-        setting = config[section][key]
+    if os.path.isfile(DEFAULT_SETTINGS):
+        print(DEFAULT_SETTINGS)
+        with open(DEFAULT_SETTINGS, 'r') as configfile:
+            config = json.load(configfile)
+            setting = config[section][key]
 
     return setting

@@ -7,7 +7,7 @@ This is the main infoboard apllication with both GUI and web interfaces.
 from flask import render_template
 from infoboard.weather import Weather
 from infoboard.news import News
-from infoboard.calendarfeed import Calendarfeed
+from infoboard.calendarfeed import CalendarFeed
 from infoboard import app
 from infoboard import settings
 
@@ -20,6 +20,8 @@ lng = settings.get_settings("WEATHER","LNG")
 loc_id = settings.get_settings("WEATHER","LOC_ID")
 calendar_url = settings.get_settings("CALENDAR", "SECRET_URL")
 display_calendar = CalendarFeed(calendar_url)
+hcal = display_calendar.HtmlCalendar
+print(hcal)
 
 LOCAL_WEATHER = Weather(lat, lng, loc_id)
 
@@ -35,5 +37,5 @@ def home():
         weather=LOCAL_WEATHER.current_weather,
         weather_location=LOCAL_WEATHER.feed_location,
         news=News(3),
-        htmlcalendar=display_calendar.HtmlCalendar
+        htmlcalendar=hcal
     )

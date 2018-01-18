@@ -68,22 +68,14 @@
 {% endblock %}
 
 {% block calendar %}
-
-<div id="news" class="container block">
+<div id="calendar" class="container block">
     <h2>Calendar</h2>
-    <ul class="container">
-        {% for story in news %}
-            <li class="row">
-                <div class="column column-33">
-                    <div>{{ htmlcalendar }}</div>
+    <div class="container">
+            <div class="row">
+                <div class="column">
+                    <div>{{ htmlcalendar|safe }}</div>
                 </div>
-                <div class="column column-66">
-                    <a href="{{ story.Link }}">{{story.Title|safe }}</a>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-
+            </div>
+        </div>
 </div>
-
 {% endblock %}

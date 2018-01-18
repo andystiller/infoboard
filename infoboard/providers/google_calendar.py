@@ -108,7 +108,7 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
             #Check that the cached version is valid
             LOGGER.info('update_forecast Cache is valid.')
         else:
-            self.force_update()s
+            self.force_update()
 
     def _load_calendar(self):
         """

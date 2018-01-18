@@ -3,6 +3,7 @@
 Calendar module takes the event information from a calendar provider.
 """
 import logging
+import calendar
 from infoboard.providers.google_calendar import GoogleCalendar
 
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +33,12 @@ class CalendarFeed(object):
         """
         LOGGER.info('Getting icon class')
         return self.__THEME_PREFIX + DRIPICONS_SVG[icon]
+
+    @property
+    def HtmlCalendar(self):
+        html_calendar = calendar.HTMLCalendar()
+        output = html_calendar.formatmonth(2017,1)
+        return output
 
 def main():
     """

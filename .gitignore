@@ -102,6 +102,7 @@ ENV/
 
 # Working files
 *.json
+*.ics
 *.DS_Store
 
 # Whitelist some files

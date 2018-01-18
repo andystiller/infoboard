@@ -7,6 +7,7 @@ It uses their ical feed (either public or private).
 
 from datetime import datetime
 from datetime import timedelta
+import requests
 import logging
 from icalendar import Calendar
 
@@ -43,8 +44,8 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
 
         LOGGER.debug('Last updated: %s', self._last_updated)
 
-        if self._feed_created != None:
-            valid_until = self._feed_created + timedelta(hours=6)
+        if self._ics_created != None:
+            valid_until = self._icsd_created + timedelta(hours=6)
             LOGGER.debug('Calendar created: %s', self._ics_created)
             LOGGER.debug('Calendar loaded: %s', self._ics_loaded)
             LOGGER.debug('Calendar valid until: %s', valid_until)
@@ -69,7 +70,7 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         # If we have recieved the forecast save it for later
         if status_code == 200:
             with open(self._file_loc, 'w') as ics_data:
-                chars_written = ics.write(req.text)
+                chars_written = ics_data.write(req.text)
                 LOGGER.debug('Number of characters written: %d', chars_written)
 
                 if chars_written == 0:
@@ -97,7 +98,7 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         """
         Method to get an updated calendar if available
         """
-        pasLOGGER.info('Updating calendar')
+        LOGGER.info('Updating calendar')
         #if the calendar isn't loaded try to load the cached version
         if self._ics_loaded is False:
             LOGGER.info('update_calendar: Calendar loading')

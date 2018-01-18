@@ -18,7 +18,7 @@ class CalendarFeed(object):
     def __init__(self, calendar_path=''):
 
         LOGGER.info('Initialising calendar feed')
-        self._weather_forecast = GoogleCalendar(calendar_path)
+        self._gcal = GoogleCalendar(calendar_path)
 
     def _theme_icons(self, icon):
         """

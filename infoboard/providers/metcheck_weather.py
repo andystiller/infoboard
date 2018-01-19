@@ -75,7 +75,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
 
         # If we have recieved the forecast save it for later
         if status_code == 200:
-            with open(self._file_loc, 'w') as json_data:
+            with open(self._file_loc, 'w', encoding='UTF-8') as json_data:
                 chars_written = json_data.write(req.text)
                 LOGGER.debug('Number of characters written: %d', chars_written)
 
@@ -86,7 +86,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
 
     def force_update(self):
         """
-        Method to force an update fo teh cached data and forecast
+        Method to force an update foe the cached data and forecast
         """
         LOGGER.info('Forcing Update')
         update_worked = False
@@ -103,17 +103,17 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         Method to get an updated forecast if available
         """
         LOGGER.info('Updating weather forecast')
-        #if the feed isn't loaded try to load the cached version
-        if self._feed_loaded is False:
-            LOGGER.info('update_forecast: Feed loading')
-            self._load_weather_json()
-            LOGGER.debug('Feed loaded : %s', self._feed_loaded)
-
         if self._cache_valid():
             #Check that the cached version is valid
             LOGGER.info('update_forecast Cache is valid.')
         else:
             self.force_update()
+
+        #if the feed isn't loaded try to load the cached version
+        if self._feed_loaded is False:
+            LOGGER.info('update_forecast: Feed loading')
+            self._load_weather_json()
+            LOGGER.debug('Feed loaded : %s', self._feed_loaded)
 
     def _load_weather_json(self):
         """
@@ -124,7 +124,7 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
         load_status = 'Not loaded'
 
         try:
-            with open(self._file_loc, 'r') as json_data:
+            with open(self._file_loc, 'r', encoding='UTF-8') as json_data:
                 weather_data = json.load(json_data)
                 forecast_data = weather_data['metcheckData']['forecastLocation']['forecast']
                 initial_run = weather_data['feedCreation']

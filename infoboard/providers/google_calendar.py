@@ -9,7 +9,7 @@ from datetime import datetime
 from datetime import timedelta
 import requests
 import logging
-from icalendar
+import icalendar
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -48,7 +48,7 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         LOGGER.debug('Last updated: %s', self._last_updated)
 
         if self._ics_created != None:
-            valid_until = self._icsd_created + timedelta(hours=6)
+            valid_until = self._ics_created + timedelta(hours=6)
             LOGGER.debug('Calendar created: %s', self._ics_created)
             LOGGER.debug('Calendar loaded: %s', self._ics_loaded)
             LOGGER.debug('Calendar valid until: %s', valid_until)
@@ -65,6 +65,9 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         """
         Function to download the calendar from Google using the specifeid link.
         """
+        if self._calendar_path == "":
+            return 0
+
         LOGGER.info('Downloading calendar')
         req = requests.get(self._calendar_path)
         status_code = req.status_code
@@ -72,7 +75,7 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
 
         # If we have recieved the forecast save it for later
         if status_code == 200:
-            with open(self._file_loc, 'w') as ics_data:
+            with open(self._file_loc, 'w', encoding='UTF-8') as ics_data:
                 chars_written = ics_data.write(req.text)
                 LOGGER.debug('Number of characters written: %d', chars_written)
 
@@ -84,7 +87,7 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
 
     def force_update(self):
         """
-        Method to force an update fo the cached data and calendar
+        Method to force an update for the cached data and calendar
         """
         LOGGER.info('Forcing Update')
         update_worked = False
@@ -101,17 +104,18 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         Method to get an updated calendar if available
         """
         LOGGER.info('Updating calendar')
-        #if the calendar isn't loaded try to load the cached version
-        if self._ics_loaded is False:
-            LOGGER.info('update_calendar: Calendar loading')
-            self._load_calendar()
-            LOGGER.debug('Feed loaded : %s', self._ics_loaded)
 
         if self._cache_valid():
             #Check that the cached version is valid
             LOGGER.info('update_forecast Cache is valid.')
         else:
             self.force_update()
+
+        #if the calendar isn't loaded try to load the cached version
+        if self._ics_loaded is False:
+            LOGGER.info('update_calendar: Calendar loading')
+            self._load_calendar()
+            LOGGER.debug('Feed loaded : %s', self._ics_loaded)
 
     def _load_calendar(self):
         """
@@ -120,11 +124,13 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         try:
             with open(self._file_loc, 'r') as ics_data:
                 self._gcal = icalendar.Calendar.from_ical(ics_data.read())
-                self._ics_created = datetime.strptime(initial_run, self.__TIME_FORMAT)
+                self._ics_created = datetime.now()
                 self._ics_loaded = True
                 load_status = 'Success'
         except:
             pass
+
+        return load_status
 
     def __iter__(self):
         return self

@@ -9,7 +9,7 @@ from datetime import datetime
 from datetime import timedelta
 import requests
 import logging
-from icalendar import Calendar
+from icalendar
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
     __cache_folder = ""
     __TIME_FORMAT = '%Y-%m-%dT%H:%M:%S.00'
 
-    def __init__(self, calendar_path=''):
+    def __init__(self, calendar_path='', limit=5):
         LOGGER.info('Initialising Calendar')
         self._last_updated = None
         self._calendar_path = calendar_path
@@ -31,6 +31,9 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         self._ics_loaded = False
         self._calendar = {}
         self.update_calendar()
+        self._gcal = None
+        self._index = 0
+        self._limit = limit
 
     def _cache_valid(self):
         """
@@ -79,7 +82,6 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
 
         return status_code
 
-
     def force_update(self):
         """
         Method to force an update fo the cached data and calendar
@@ -115,7 +117,28 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         """
         Function to load cached calendar
         """
-        pass
+        try:
+            with open(self._file_loc, 'r') as ics_data:
+                self._gcal = icalendar.Calendar.from_ical(ics_data.read())
+                self._ics_created = datetime.strptime(initial_run, self.__TIME_FORMAT)
+                self._ics_loaded = True
+                load_status = 'Success'
+        except:
+            pass
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        event = None
+
+        if self._index < self._limit:
+            event = self._gcal.walk('vevent')
+            self._index += 1
+        else:
+            raise StopIteration
+
+        return event
 
 
 

@@ -6,7 +6,7 @@ It uses thethe free rss feed
 """
 
 import feedparser
-from unidecode import unidecode
+#from unidecode import unidecode
 
 class YahooNews(object):  # added object base class for python2 compatibility.
     """
@@ -14,7 +14,7 @@ class YahooNews(object):  # added object base class for python2 compatibility.
     """
     __YAHOO_NEWS_URL = 'https://uk.news.yahoo.com/rss'
 
-    def __init__(self, limit = None):
+    def __init__(self, limit=None):
         self._feed = None
         self._iterator = None
         self._index = 0
@@ -26,10 +26,16 @@ class YahooNews(object):  # added object base class for python2 compatibility.
             self._limit = limit
 
     def update(self):
+        """
+        Method to update and parse the news feed
+        """
         self._feed = feedparser.parse(self.__YAHOO_NEWS_URL)
         self._iterator = iter(self._feed['entries'])
 
     def news(self):
+        """
+        Method to return the entire unprocessed news feed
+        """
         return self._feed
 
     def __iter__(self):

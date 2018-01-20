@@ -101,13 +101,6 @@ class Weather(object):
         LOGGER.info('Initialising forecast')
         self._weather_forecast = MetcheckWeather(lat, lng, loc_id)
 
-    def _theme_icons(self, icon):
-        """
-        Function to get the path to the required icon
-        """
-        LOGGER.info('Getting icon path')
-        return DRIPICONS_PATH + DRIPICONS_SVG[icon] + '.svg'
-
     def _theme_icons_class(self, icon):
         """
         Function to get the path to the required icon
@@ -130,8 +123,7 @@ class Weather(object):
         forecast['WindDirection'] = detailed_forecast['Wind Direction']
         forecast['ChanceOfRain'] = detailed_forecast['Chance of rain'] + '%'
         forecast['Cloud'] = detailed_forecast['Cloud'] + '%'
-
-        icon = self._theme_icons(detailed_forecast['Icon'])
+        icon = DRIPICONS_PATH + DRIPICONS_SVG[detailed_forecast['Icon']] + '.svg'
         forecast['Icon'] = icon
         forecast['IconClass'] = self._theme_icons_class(detailed_forecast['Icon'])
         forecast['Credits'] = self._weather_forecast.credits

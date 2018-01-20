@@ -4,6 +4,7 @@ infoboard application
 This is the main infoboard apllication with both GUI and web interfaces.
 """
 
+import os.path
 from flask import render_template
 from infoboard.weather import Weather
 from infoboard.news import News
@@ -11,19 +12,17 @@ from infoboard.calendarfeed import CalendarFeed
 from infoboard import app
 from infoboard import settings
 
-import os.path
-
 print(os.path.isfile("settings.json"))
 
-lat = settings.get_settings("WEATHER","LAT")
-lng = settings.get_settings("WEATHER","LNG")
-loc_id = settings.get_settings("WEATHER","LOC_ID")
-calendar_url = settings.get_settings("CALENDAR", "SECRET_URL")
-display_calendar = CalendarFeed(calendar_url)
-hcal = display_calendar.HtmlCalendar
-print(hcal)
+LAT = settings.get_settings("WEATHER", "LAT")
+LNG = settings.get_settings("WEATHER", "LNG")
+LOC_ID = settings.get_settings("WEATHER", "LOC_ID")
+CALENDAR_URL = settings.get_settings("CALENDAR", "SECRET_URL")
+DISPLAY_CALENDAR = CalendarFeed(CALENDAR_URL)
+HCAL = DISPLAY_CALENDAR.HtmlCalendar
+print(HCAL)
 
-LOCAL_WEATHER = Weather(lat, lng, loc_id)
+LOCAL_WEATHER = Weather(LAT, LNG, LOC_ID)
 
 @app.route('/')
 @app.route('/home')
@@ -31,11 +30,11 @@ def home():
     """Renders the home page."""
     return render_template(
         'index.html',
-        title=settings.get_settings("DEFAULT","WEB_TITLE"),
+        title=settings.get_settings("DEFAULT", "WEB_TITLE"),
         weathercss=LOCAL_WEATHER.theme_css,
         weatherfont=LOCAL_WEATHER.font_css,
         weather=LOCAL_WEATHER.current_weather,
         weather_location=LOCAL_WEATHER.feed_location,
         news=News(3),
-        htmlcalendar=hcal
+        htmlcalendar=HCAL
     )

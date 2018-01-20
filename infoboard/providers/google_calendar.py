@@ -7,8 +7,8 @@ It uses their ical feed (either public or private).
 
 from datetime import datetime
 from datetime import timedelta
-import requests
 import logging
+import requests
 import icalendar
 
 logging.basicConfig(level=logging.DEBUG)
@@ -21,19 +21,18 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
     """
     __cache_folder = ""
     __TIME_FORMAT = '%Y-%m-%dT%H:%M:%S.00'
+    _file_loc = __cache_folder + 'calendar.ics'
 
     def __init__(self, calendar_path='', limit=5):
         LOGGER.info('Initialising Calendar')
-        self._last_updated = None
         self._calendar_path = calendar_path
-        self._file_loc = self.__cache_folder + 'calendar'  + '.ics'
         self._ics_created = None
         self._ics_loaded = False
         self._calendar = {}
-        self.update_calendar()
         self._gcal = None
         self._index = 0
         self._limit = limit
+        self.update_calendar()
 
     def _cache_valid(self):
         """
@@ -44,8 +43,6 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         LOGGER.info('Checking cache is valid')
         current_time = datetime.now()
         cache_is_valid = False
-
-        LOGGER.debug('Last updated: %s', self._last_updated)
 
         if self._ics_created != None:
             valid_until = self._ics_created + timedelta(hours=6)
@@ -93,7 +90,6 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         update_worked = False
 
         if self._download_ical() == 200:
-            self._last_updated = datetime.now()
             update_worked = True
 
         LOGGER.debug('Updating worked: %s', update_worked)
@@ -107,7 +103,7 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
 
         if self._cache_valid():
             #Check that the cached version is valid
-            LOGGER.info('update_forecast Cache is valid.')
+            LOGGER.info('update_calendar Cache is valid.')
         else:
             self.force_update()
 
@@ -121,14 +117,11 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         """
         Function to load cached calendar
         """
-        try:
-            with open(self._file_loc, 'r') as ics_data:
-                self._gcal = icalendar.Calendar.from_ical(ics_data.read())
-                self._ics_created = datetime.now()
-                self._ics_loaded = True
-                load_status = 'Success'
-        except:
-            pass
+        with open(self._file_loc, 'r') as ics_data:
+            self._gcal = icalendar.Calendar.from_ical(ics_data.read())
+            self._ics_created = datetime.now()
+            self._ics_loaded = True
+            load_status = 'Success'
 
         return load_status
 

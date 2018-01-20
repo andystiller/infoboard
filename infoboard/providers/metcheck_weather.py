@@ -212,8 +212,12 @@ class MetcheckWeather(object):  # added object base class for python2 compatibil
 
     @property
     def credits(self):
-        return '<a href="//www.metcheck.com/OTHER/ghx_global_hybrid_model.asp"><img src="//www.metcheck.com/IMAGES/LOGOS/ghx_poweredby.png" border=0></a>'
-
+        """
+        Returns the feed credits as an html link and image
+        """
+        creditshtml = '<a href="//www.metcheck.com/OTHER/ghx_global_hybrid_model.asp">'
+        creditshtml += '<img src="//www.metcheck.com/IMAGES/LOGOS/ghx_poweredby.png" border=0></a>'
+        return creditshtml
 
 def main():
     """

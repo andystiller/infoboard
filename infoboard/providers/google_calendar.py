@@ -28,10 +28,10 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         self._calendar_path = calendar_path
         self._ics_created = None
         self._ics_loaded = False
-        self._calendar = {}
         self._gcal = None
         self._index = 0
         self._limit = limit
+        self._iterator = None
         self.update_calendar()
 
     def _cache_valid(self):
@@ -111,7 +111,8 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         if self._ics_loaded is False:
             LOGGER.info('update_calendar: Calendar loading')
             self._load_calendar()
-            LOGGER.debug('Feed loaded : %s', self._ics_loaded)
+            self._iterator = iter(self._gcal.walk('vevent'))
+            LOGGER.debug('Calendar loaded : %s', self._ics_loaded)
 
     def _load_calendar(self):
         """
@@ -132,13 +133,16 @@ class GoogleCalendar(object):  # added object base class for python2 compatibili
         event = None
 
         if self._index < self._limit:
-            event = self._gcal.walk('vevent')
+            raw_event = self._iterator.__next__()
+            event = {}
+            event['Description'] = raw_event['SUMMARY']
+            event['Start'] = raw_event['DTSTART'].dt
+            event['Location'] = raw_event['LOCATION']
             self._index += 1
         else:
             raise StopIteration
 
         return event
-
 
 
 def main():

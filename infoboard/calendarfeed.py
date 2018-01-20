@@ -4,6 +4,7 @@ Calendar module takes the event information from a calendar provider.
 """
 import logging
 import calendar
+from datetime import datetime
 from infoboard.providers.google_calendar import GoogleCalendar
 
 logging.basicConfig(level=logging.INFO)
@@ -14,37 +15,47 @@ class CalendarFeed(object):
     The CalendarFeed class handles getting the calendar from a provider,
     processing and outputting events
     """
-    
-    def __init__(self, calendar_path=''):
+
+    def __init__(self, calendar_path='', limit=5):
 
         LOGGER.info('Initialising calendar feed')
+        self._limit = limit
+        self._index = 0
         self._gcal = GoogleCalendar(calendar_path)
 
-    def _theme_icons(self, icon):
-        """
-        Function to get the path to the required icon
-        """
-        LOGGER.info('Getting icon path')
-        return DRIPICONS_PATH + DRIPICONS_SVG[icon] + '.svg'
 
-    def _theme_icons_class(self, icon):
-        """
-        Function to get the path to the required icon
-        """
-        LOGGER.info('Getting icon class')
-        return self.__THEME_PREFIX + DRIPICONS_SVG[icon]
 
     @property
-    def HtmlCalendar(self):
+    def htmlcalendar(self):
+        """
+        Generates an HTML month calendar
+        """
+        now = datetime.now()
         html_calendar = calendar.HTMLCalendar()
-        output = html_calendar.formatmonth(2017,1)
+        output = html_calendar.formatmonth(now.year, now.month)
         return output
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        event = None
+
+        if self._index < self._limit:
+            event = self._gcal.__next__()
+            LOGGER.debug('Event: %s', event)
+            self._index += 1
+        else:
+            raise StopIteration
+
+        return event
 
 def main():
     """
     Entry point for testing if the file is run on it's own.
     """
-    calendar_feed = CalendarFeed()
-    
+    pass
+
+
 if __name__ == "__main__":
     main()

@@ -18,9 +18,7 @@ LAT = settings.get_settings("WEATHER", "LAT")
 LNG = settings.get_settings("WEATHER", "LNG")
 LOC_ID = settings.get_settings("WEATHER", "LOC_ID")
 CALENDAR_URL = settings.get_settings("CALENDAR", "SECRET_URL")
-DISPLAY_CALENDAR = CalendarFeed(CALENDAR_URL)
-HCAL = DISPLAY_CALENDAR.HtmlCalendar
-print(HCAL)
+DISPLAY_CALENDAR = CalendarFeed(CALENDAR_URL, 5)
 
 LOCAL_WEATHER = Weather(LAT, LNG, LOC_ID)
 
@@ -36,5 +34,6 @@ def home():
         weather=LOCAL_WEATHER.current_weather,
         weather_location=LOCAL_WEATHER.feed_location,
         news=News(3),
-        htmlcalendar=HCAL
+        htmlcalendar=DISPLAY_CALENDAR.htmlcalendar,
+        events=CalendarFeed(CALENDAR_URL, 5)
     )

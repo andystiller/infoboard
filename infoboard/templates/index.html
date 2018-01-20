@@ -71,11 +71,32 @@
 <div id="calendar" class="container block">
     <h2>Calendar</h2>
     <div class="container">
-            <div class="row">
-                <div class="column">
-                    <div>{{ htmlcalendar|safe }}</div>
-                </div>
+        <div class="row">
+            <div class="column">
+                <div>{{ htmlcalendar|safe }}</div>
             </div>
         </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block eventlist %}
+<div class="container block">
+    <h2>Events from Google</h2>
+    <ul class="container">
+        {% for event in events %}
+            <li class="row">
+                <div class="column column-33">
+                    <p>{{ event.Start }}</p>
+                </div>
+                <div class="column column-66">
+                    <p>
+                        {{ event.Description }}<br />
+                        {{ event.Location }}
+                    </p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>    
 </div>
 {% endblock %}
